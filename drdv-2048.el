@@ -259,8 +259,7 @@ If ROW_OR_COLUMN is equal to \"row\" etreturn the INDEX-th row."
     (dotimes (k drdv-2048-dimension)
       (if (equal row_or_column "col")
 	  (drdv-2048-set-element k index (elt vector k))
-	(drdv-2048-set-element index k (elt vector k))))
-    vector))
+	(drdv-2048-set-element index k (elt vector k))))))
 
 (defun drdv-2048-move1d (vector direction)
   "Move elements of VECTOR acourding to the rules of the game.
