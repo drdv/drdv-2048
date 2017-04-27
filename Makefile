@@ -5,15 +5,12 @@ PACKAGE-NAME=drdv-2048.el
 DELAY=10
 OUTPUT_DIR=./output
 
-# 1. make cask
-# 2. make
-
 all: build
 
 checkdoc:
 	@$(EMACS) -Q --batch -f "checkdoc" ${PACKAGE-NAME}
 
-package-lint:
+package-lint: cask
 	${CASK} exec $(EMACS) -Q --batch -l "package-lint.el" \
 	-f "package-lint-batch-and-exit" ${PACKAGE-NAME}
 
@@ -25,6 +22,9 @@ build: checkdoc package-lint
 
 cask:
 	${CASK} install
+
+test: cask build
+	${CASK} exec ert-runner
 
 gif:
 	convert -delay ${DELAY} ${OUTPUT_DIR}/image-*.jpg ${OUTPUT_DIR}/animated.gif
