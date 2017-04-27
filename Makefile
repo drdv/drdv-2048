@@ -34,4 +34,4 @@ clean :
 	@rm -rf .cask
 	@cd ${OUTPUT_DIR} && make clean
 
-.PHONY:	all checkdoc package-lint build cask gif clean
+.PHONY:	all checkdoc package-lint build cask gif clean test
