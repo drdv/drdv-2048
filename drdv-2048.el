@@ -414,7 +414,6 @@ Set DONT-RECORD non-nil to not record history (useful when initializing
 
 
 
-;; FIXME: to record the replay using something like camcorder.el
 (defun drdv-2048-replay (filename)
   "Replay a previously stored game in FILENAME."
   (interactive "fFilename: ")
