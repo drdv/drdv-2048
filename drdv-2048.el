@@ -3,8 +3,8 @@
 ;; Copyright (C) 2017 Dimitar Dimitrov
 
 ;; Author: Dimitar Dimitrov <mail.mitko@gmail.com>
-;; URL: none
-;; Package-Version: 20170426.1
+;; URL: https://github.com/drdv/drdv-2048
+;; Package-Version: 20170503.1
 ;; Package-Requires: ()
 ;; Keywords: games
 
