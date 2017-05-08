@@ -408,7 +408,7 @@ Set DONT-RECORD non-nil to not record history (useful when initializing
 	(insert "      =====> GAME OVER <=====")
 	(put-text-property (+ point 6) (+ point 29) 'font-lock-face 'drdv-2048-face-16)
 	)
-      (when (y-or-n-p "Press y to start again. Start again? ")
+      (when (y-or-n-p "Press y to start again.  Start again? ")
 	(drdv-2048-play)))
     ))
 
