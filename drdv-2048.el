@@ -95,6 +95,15 @@ replaying with `drdv-2048-replay'.")
 
 
 
+(defgroup drdv-2048 nil
+  "The 2048 game."
+  :group 'games)
+
+(defgroup drdv-2048-faces nil
+  "The 2048 game related phases."
+  :group 'drdv-2048
+  :group 'faces)
+
 ;; taken directly from 2048-game.el
 (defface drdv-2048-face-2    '((t . (:background "khaki"        :foreground "black"))) "Face for 2"    :group 'drdv-2048-faces)
 (defface drdv-2048-face-4    '((t . (:background "burlywood"    :foreground "black"))) "Face for 4"    :group 'drdv-2048-faces)
@@ -408,8 +417,7 @@ Set DONT-RECORD non-nil to not record history (useful when initializing
 	(put-text-property (+ point 6) (+ point 29) 'font-lock-face 'drdv-2048-face-16)
 	)
       (when (y-or-n-p "Press y to start again.  Start again? ")
-	(drdv-2048-play)))
-    ))
+	(drdv-2048-play)))))
 
 
 
