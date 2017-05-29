@@ -16,7 +16,7 @@
 
 ;;; Commentary:
 
-;; Pakage tested on:
+;; Package tested on:
 ;; GNU Emacs 25.2.1 (x86_64-apple-darwin16.5.0)
 
 ;; Given that there is 2048-game.el, I wrote this because I simply wanted
@@ -51,7 +51,7 @@
   "Most recent valid move.
 When playing, this is the car or `drdv-2048-moves-history',
 but it is convenient to have a dedicated variable when
-replayng with `drdv-2048-replay'.")
+replaying with `drdv-2048-replay'.")
 
 (defvar drdv-2048-score 0
   "The score.")
@@ -92,7 +92,6 @@ replayng with `drdv-2048-replay'.")
     (define-key map (kbd "w"      ) 'drdv-2048-record-history)
     map)
   "Keymap for drdv-2048 major mode.")
-(make-local-variable 'drdv-2048-mode-map)
 
 
 
@@ -145,7 +144,7 @@ drdv-2048-dimension-1 to index 0."
     ;; add scored-in-this-move to the total score
     (setq drdv-2048-score (+ drdv-2048-score
 			     scored-in-this-move))
-    ;; push scored-in-this-move to the score histoy
+    ;; push scored-in-this-move to the score history
     (push scored-in-this-move drdv-2048-score-history)
     ;; return whether the board has been modified
     modified))
@@ -253,7 +252,7 @@ If ROW_OR_COLUMN is equal to \"row\" return the INDEX-th row."
 (defun drdv-2048-set-board-vector (index vector row_or_column)
   "Set a row or column with a given INDEX equal to VECTOR.
 If ROW_OR_COLUMN is equal to \"col\" set the INDEX-th column
-If ROW_OR_COLUMN is equal to \"row\" etreturn the INDEX-th row."
+If ROW_OR_COLUMN is equal to \"row\" set the INDEX-th row."
   (if (>= index drdv-2048-dimension)
       (error "Inconsistent dimensions")
     (dotimes (k drdv-2048-dimension)
@@ -262,7 +261,7 @@ If ROW_OR_COLUMN is equal to \"row\" etreturn the INDEX-th row."
 	(drdv-2048-set-element index k (elt vector k))))))
 
 (defun drdv-2048-move1d (vector direction)
-  "Move elements of VECTOR acourding to the rules of the game.
+  "Move elements of VECTOR according to the rules of the game.
 If argument DIRECTION is 1, move from index 0 to index drdv-2048-dimension-1,
 otherwise move from index drdv-2048-dimension-1 to index 0."
   (let ((previous 0)
@@ -326,7 +325,7 @@ otherwise move from index drdv-2048-dimension-1 to index 0."
     (drdv-2048-display-board)))
 
 (defun drdv-2048-insert-random-element (&optional dont-record)
-  "Insert random element at a randomply chosen cell with a zero value.
+  "Insert random element at a randomly chosen cell with a zero value.
 The random element can be 2 (90%) or 4 (10% of the time).
 Set DONT-RECORD non-nil to not record history (useful when initializing
 `drdv-2048-board')."
