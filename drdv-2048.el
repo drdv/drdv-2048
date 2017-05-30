@@ -38,7 +38,8 @@
 (defvar drdv-2048-dimension 4
   "Dimension of the (square) board.")
 
-(defvar drdv-2048-board (make-vector (* drdv-2048-dimension drdv-2048-dimension) 0)
+(defvar drdv-2048-board (make-vector (* drdv-2048-dimension drdv-2048-dimension)
+				     0)
   "The board (zero-based column major storage).")
 
 (defvar drdv-2048-number-of-moves 0
@@ -75,7 +76,7 @@ replaying with `drdv-2048-replay'.")
   "Name of buffer where to display the board.")
 
 (defvar drdv-2048-possible-values-to-insert-randomly (make-vector 10 2)
-  "When a new element is inserted into the board, randomly choose a number from this sequence.")
+  "Randomly choose a number from this sequence upon insertion of new element.")
 ;; 90% of the time insert 2 (the remaining 10% insert 4)
 (aset drdv-2048-possible-values-to-insert-randomly 9 4)
 
@@ -105,17 +106,58 @@ replaying with `drdv-2048-replay'.")
   :group 'faces)
 
 ;; taken directly from 2048-game.el
-(defface drdv-2048-face-2    '((t . (:background "khaki"        :foreground "black"))) "Face for 2"    :group 'drdv-2048-faces)
-(defface drdv-2048-face-4    '((t . (:background "burlywood"    :foreground "black"))) "Face for 4"    :group 'drdv-2048-faces)
-(defface drdv-2048-face-8    '((t . (:background "orange3"      :foreground "black"))) "Face for 8"    :group 'drdv-2048-faces)
-(defface drdv-2048-face-16   '((t . (:background "orange"       :foreground "black"))) "Face for 16"   :group 'drdv-2048-faces)
-(defface drdv-2048-face-32   '((t . (:background "orange red"   :foreground "black"))) "Face for 32"   :group 'drdv-2048-faces)
-(defface drdv-2048-face-64   '((t . (:background "firebrick"    :foreground "white"))) "Face for 64"   :group 'drdv-2048-faces)
-(defface drdv-2048-face-128  '((t . (:background "dark red"     :foreground "white"))) "Face for 128"  :group 'drdv-2048-faces)
-(defface drdv-2048-face-256  '((t . (:background "dark magenta" :foreground "white"))) "Face for 256"  :group 'drdv-2048-faces)
-(defface drdv-2048-face-512  '((t . (:background "magenta"      :foreground "black"))) "Face for 512"  :group 'drdv-2048-faces)
-(defface drdv-2048-face-1024 '((t . (:background "gold"         :foreground "black"))) "Face for 1024" :group 'drdv-2048-faces)
-(defface drdv-2048-face-2048 '((t . (:background "yellow"       :foreground "black"))) "Face for 2048" :group 'drdv-2048-faces)
+(defface drdv-2048-face-2
+  '((t . (:background "khaki" :foreground "black")))
+  "Face for 2"
+  :group 'drdv-2048-faces)
+
+(defface drdv-2048-face-4
+  '((t . (:background "burlywood" :foreground "black")))
+  "Face for 4"
+  :group 'drdv-2048-faces)
+
+(defface drdv-2048-face-8
+  '((t . (:background "orange3" :foreground "black")))
+  "Face for 8"
+  :group 'drdv-2048-faces)
+
+(defface drdv-2048-face-16
+  '((t . (:background "orange" :foreground "black")))
+  "Face for 16"
+  :group 'drdv-2048-faces)
+(defface drdv-2048-face-32
+  '((t . (:background "orange red" :foreground "black")))
+  "Face for 32"
+  :group 'drdv-2048-faces)
+(defface drdv-2048-face-64
+  '((t . (:background "firebrick" :foreground "white")))
+  "Face for 64"
+  :group 'drdv-2048-faces)
+
+(defface drdv-2048-face-128
+  '((t . (:background "dark red" :foreground "white")))
+  "Face for 128"
+  :group 'drdv-2048-faces)
+
+(defface drdv-2048-face-256
+  '((t . (:background "dark magenta" :foreground "white")))
+  "Face for 256"
+  :group 'drdv-2048-faces)
+
+(defface drdv-2048-face-512
+  '((t . (:background "magenta" :foreground "black")))
+  "Face for 512"
+  :group 'drdv-2048-faces)
+
+(defface drdv-2048-face-1024
+  '((t . (:background "gold" :foreground "black")))
+  "Face for 1024"
+  :group 'drdv-2048-faces)
+
+(defface drdv-2048-face-2048
+  '((t . (:background "yellow" :foreground "black")))
+  "Face for 2048"
+  :group 'drdv-2048-faces)
 
 
 
@@ -138,9 +180,11 @@ drdv-2048-dimension-1 to index 0."
 	vector-modified-score
 	modified)
     (dotimes (k drdv-2048-dimension)
-      ;; vector-modified-score is a list ("the new vector" "modified or not" "score")
+      ;; vector-modified-score is a list
+      ;; ("the new vector" "modified or not" "score")
       (setq vector-modified-score
-	    (drdv-2048-move1d (drdv-2048-get-board-vector k row_or_column) direction))
+	    (drdv-2048-move1d (drdv-2048-get-board-vector k row_or_column)
+			      direction))
       ;; if necessary record back in drdv-2048-board and update score
       (when (nth 1 vector-modified-score)
 	(drdv-2048-set-board-vector k (car vector-modified-score) row_or_column)
@@ -339,8 +383,10 @@ The random element can be 2 (90%) or 4 (10% of the time).
 Set DONT-RECORD non-nil to not record history (useful when initializing
 `drdv-2048-board')."
   (let* ((zero-elements (drdv-2048-get-index-of-zero-elements))
-	 (index-1 (random (length zero-elements)))
-	 (index-2 (random (length drdv-2048-possible-values-to-insert-randomly))))
+	 (index-1
+	  (random (length zero-elements)))
+	 (index-2
+	  (random (length drdv-2048-possible-values-to-insert-randomly))))
     (aset drdv-2048-board
 	  (elt zero-elements index-1)
 	  (elt drdv-2048-possible-values-to-insert-randomly index-2))
@@ -351,7 +397,8 @@ Set DONT-RECORD non-nil to not record history (useful when initializing
 
 (defun drdv-2048-reset-game ()
   "Reset the game."
-  (setq drdv-2048-board (make-vector (* drdv-2048-dimension drdv-2048-dimension) 0))
+  (setq drdv-2048-board (make-vector (* drdv-2048-dimension drdv-2048-dimension)
+				     0))
   (setq drdv-2048-moves-history nil)
   (setq drdv-2048-score-history nil)
   (setq drdv-2048-inserted-random-elements-history nil)
@@ -380,21 +427,24 @@ Set DONT-RECORD non-nil to not record history (useful when initializing
       (dotimes (col drdv-2048-dimension)
 	(let ((point (point)))
 	  (insert "|        ")
-	  (put-text-property (+ point 1) (+ point 9) 'font-lock-face (drdv-2048-get-face row col))))
+	  (put-text-property (+ point 1) (+ point 9)
+			     'font-lock-face (drdv-2048-get-face row col))))
       (insert "|\n")
 
       ;; insert the number
       (dotimes (col drdv-2048-dimension)
 	(let ((point (point)))
 	  (insert (format "| %4d   " (drdv-2048-get-element row col)))
-	  (put-text-property (+ point 1) (+ point 9) 'font-lock-face (drdv-2048-get-face row col))))
+	  (put-text-property (+ point 1) (+ point 9)
+			     'font-lock-face (drdv-2048-get-face row col))))
       (insert "|\n")
 
       ;; insert empty line below the number
       (dotimes (col drdv-2048-dimension)
 	(let ((point (point)))
 	  (insert "|        ")
-	  (put-text-property (+ point 1) (+ point 9) 'font-lock-face (drdv-2048-get-face row col))))
+	  (put-text-property (+ point 1) (+ point 9)
+			     'font-lock-face (drdv-2048-get-face row col))))
       (insert "|\n")
       )
 
@@ -414,7 +464,8 @@ Set DONT-RECORD non-nil to not record history (useful when initializing
       (insert "\n\n")
       (let ((point (point)))
 	(insert "      =====> GAME OVER <=====")
-	(put-text-property (+ point 6) (+ point 29) 'font-lock-face 'drdv-2048-face-16)
+	(put-text-property (+ point 6) (+ point 29)
+			   'font-lock-face 'drdv-2048-face-16)
 	)
       (when (y-or-n-p "Press y to start again.  Start again? ")
 	(drdv-2048-play)))))
@@ -455,10 +506,10 @@ Set DONT-RECORD non-nil to not record history (useful when initializing
       (setq drdv-2048-last-move (nth k moves-history))
       (setq index-and-value (nth k random-elements-history))
       (cond
-	((equal drdv-2048-last-move "U") (drdv-2048-move "col"  1))
-	((equal drdv-2048-last-move "D") (drdv-2048-move "col" -1))
-	((equal drdv-2048-last-move "L") (drdv-2048-move "row"  1))
-	((equal drdv-2048-last-move "R") (drdv-2048-move "row" -1)))
+       ((equal drdv-2048-last-move "U") (drdv-2048-move "col"  1))
+       ((equal drdv-2048-last-move "D") (drdv-2048-move "col" -1))
+       ((equal drdv-2048-last-move "L") (drdv-2048-move "row"  1))
+       ((equal drdv-2048-last-move "R") (drdv-2048-move "row" -1)))
       (aset drdv-2048-board
 	    (elt index-and-value 0)
 	    (elt index-and-value 1))
@@ -469,20 +520,22 @@ Set DONT-RECORD non-nil to not record history (useful when initializing
 	;;   0, 50  are the x and -y from the top left corner
 	;;          (50 is appropriate when the terminal has tabs)
 	;; 340, 340 are width and height (appropriate for the size of the board)
-	(shell-command (concat "screencapture -R 0,50,340,340 -x -t jpg ./output/image-"
-			       (format "%06d" (1+ k)) ".jpg"))))))
+	(shell-command
+	 (concat "screencapture -R 0,50,340,340 -x -t jpg ./output/image-"
+		 (format "%06d" (1+ k)) ".jpg"))))))
 
 (defun drdv-2048-record-history (filename)
   "Store the game history in FILENAME."
   (interactive "fFilename: ")
   (let ((json-encoding-pretty-print t))
-    (write-region (json-encode `(("initial-board"   . ,drdv-2048-initial-board)
-				 ("final-board"     . ,drdv-2048-board)
-				 ("score"           . ,drdv-2048-score)
-				 ("number-moves"    . ,drdv-2048-number-of-moves)
-				 ("moves"           . ,drdv-2048-moves-history)
-				 ("random-elements" . ,drdv-2048-inserted-random-elements-history)
-				 ;; ("scores"          . ,drdv-2048-score-history)
+    (write-region (json-encode `(("initial-board" . ,drdv-2048-initial-board)
+				 ("final-board" . ,drdv-2048-board)
+				 ("score" . ,drdv-2048-score)
+				 ("number-moves" . ,drdv-2048-number-of-moves)
+				 ("moves" . ,drdv-2048-moves-history)
+				 ("random-elements" .
+				  ,drdv-2048-inserted-random-elements-history)
+				 ;; ("scores" . ,drdv-2048-score-history)
 				 ))
 		  nil filename)))
 
@@ -492,11 +545,16 @@ Set DONT-RECORD non-nil to not record history (useful when initializing
   "Return true if the game has ended, return nil otherwise."
   (let (modified)
     (dotimes (k drdv-2048-dimension)
-      (setq modified (or modified
-			 (nth 1 (drdv-2048-move1d (drdv-2048-get-board-vector k "row")  1))
-			 (nth 1 (drdv-2048-move1d (drdv-2048-get-board-vector k "row") -1))
-			 (nth 1 (drdv-2048-move1d (drdv-2048-get-board-vector k "col")  1))
-			 (nth 1 (drdv-2048-move1d (drdv-2048-get-board-vector k "col") -1)))))
+      (setq modified
+	    (or modified
+		(nth 1 (drdv-2048-move1d (drdv-2048-get-board-vector k "row")
+					 1))
+		(nth 1 (drdv-2048-move1d (drdv-2048-get-board-vector k "row")
+					 -1))
+		(nth 1 (drdv-2048-move1d (drdv-2048-get-board-vector k "col")
+					 1))
+		(nth 1 (drdv-2048-move1d (drdv-2048-get-board-vector k "col")
+					 -1)))))
     (not modified)))
 
 (provide 'drdv-2048)
