@@ -185,7 +185,7 @@ replaying with `drdv-2048-replay'.")
 
 
 
-(defun drdv-2048-play ()
+(defun drdv-2048 ()
   "Start/restart the game."
   (interactive)
   (switch-to-buffer (generate-new-buffer-name drdv-2048-buffer-name-start))
@@ -490,7 +490,7 @@ Set DONT-RECORD non-nil to not record history (useful when initializing
 	(put-text-property (+ point 6) (+ point 29)
 			   'font-lock-face 'drdv-2048-face-16))
       (when (y-or-n-p "Press y to start again.  Start again? ")
-	(drdv-2048-play)))))
+	(drdv-2048)))))
 
 
 
@@ -549,7 +549,7 @@ Set DONT-RECORD non-nil to not record history (useful when initializing
 
 (defun drdv-2048-record-history (filename)
   "Store the game history in FILENAME."
-  (interactive "fFilename: ")
+  (interactive "FFilename: ")
   (let ((json-encoding-pretty-print t))
     (write-region (json-encode `(("initial-board" . ,drdv-2048-initial-board)
 				 ("final-board" . ,drdv-2048-board)
