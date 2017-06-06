@@ -187,7 +187,7 @@ replaying with `drdv-2048-replay'.")
   "Start/restart the game."
   (interactive)
   (switch-to-buffer drdv-2048-buffer-name)
-  (buffer-disable-undo drdv-2048-buffer-name)
+  (buffer-disable-undo)
   (drdv-2048-mode)
   (drdv-2048-reset-game)
   (drdv-2048-display-board))
@@ -354,7 +354,7 @@ otherwise move from index drdv-2048-dimension-1 to index 0."
 	(scored 0))
     (dolist (i span)
       ;; jump over zero entries
-      (when (not (= (elt vector i) 0))
+      (unless (= (elt vector i) 0)
 	(if (= previous 0)
 	    ;; THEN-1
 	    (setq previous (elt vector i))
@@ -372,17 +372,17 @@ otherwise move from index drdv-2048-dimension-1 to index 0."
 	      (setq previous (elt vector i))))
 	  ;; belongs to ELSE-1 but not inside the second IF
 	  (setq j (+ sign j))))
-      (when (not (= previous 0))
+      (unless (= previous 0)
 	(aset updated-vector j previous)))
     ;; return the updated vector
-    (when (not (equal updated-vector vector))
+    (unless (equal updated-vector vector)
       (setq modified t))
     `(,updated-vector ,modified ,scored)))
 
 (defun drdv-2048-get-face (row col)
   "Return nil if number at ROW COL is zero and appropriate face otherwise."
   (let ((number (drdv-2048-get-element row col)))
-    (when (not (= number 0))
+    (unless (= number 0)
       (intern (concat "drdv-2048-face-"
 		      (int-to-string number))))))
 
@@ -435,8 +435,8 @@ Set DONT-RECORD non-nil to not record history (useful when initializing
 (defun drdv-2048-display-board ()
   "Display the board."
   ;; make sure that this function is executed only in the correct buffer
-  (when (not (equal (buffer-name) drdv-2048-buffer-name))
-    (error (format "We are not in buffer %s" drdv-2048-buffer-name)))
+  (unless (equal (buffer-name) drdv-2048-buffer-name)
+    (error (format "We are not in a %s buffer" drdv-2048-buffer-name)))
   (let ((inhibit-read-only t))
     (erase-buffer)
     (dotimes (row drdv-2048-dimension)
@@ -467,8 +467,7 @@ Set DONT-RECORD non-nil to not record history (useful when initializing
 	  (insert "|        ")
 	  (put-text-property (+ point 1) (+ point 9)
 			     'font-lock-face (drdv-2048-get-face row col))))
-      (insert "|\n")
-      )
+      (insert "|\n"))
 
     ;; insert the closing line
     (dotimes (col drdv-2048-dimension)
@@ -487,8 +486,7 @@ Set DONT-RECORD non-nil to not record history (useful when initializing
       (let ((point (point)))
 	(insert "      =====> GAME OVER <=====")
 	(put-text-property (+ point 6) (+ point 29)
-			   'font-lock-face 'drdv-2048-face-16)
-	)
+			   'font-lock-face 'drdv-2048-face-16))
       (when (y-or-n-p "Press y to start again.  Start again? ")
 	(drdv-2048-play)))))
 
@@ -520,7 +518,7 @@ Set DONT-RECORD non-nil to not record history (useful when initializing
     (setq drdv-2048-score 0)
 
     (switch-to-buffer drdv-2048-buffer-name)
-    (buffer-disable-undo drdv-2048-buffer-name)
+    (buffer-disable-undo)
     (drdv-2048-mode)
     (drdv-2048-display-board)
     (sit-for drdv-2048-replay-wait-period)
