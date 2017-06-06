@@ -107,55 +107,77 @@ replaying with `drdv-2048-replay'.")
 
 ;; taken directly from 2048-game.el
 (defface drdv-2048-face-2
-  '((t . (:background "khaki" :foreground "black")))
+  '((t . (:inherit highlight
+		   :background "khaki"
+		   :foreground "black")))
   "Face for 2"
   :group 'drdv-2048-faces)
 
 (defface drdv-2048-face-4
-  '((t . (:background "burlywood" :foreground "black")))
+  '((t . (:inherit highlight
+		   :background "burlywood"
+		   :foreground "black")))
   "Face for 4"
   :group 'drdv-2048-faces)
 
 (defface drdv-2048-face-8
-  '((t . (:background "orange3" :foreground "black")))
+  '((t . (:inherit highlight
+		   :background "orange3"
+		   :foreground "black")))
   "Face for 8"
   :group 'drdv-2048-faces)
 
 (defface drdv-2048-face-16
-  '((t . (:background "orange" :foreground "black")))
+  '((t . (:inherit highlight
+		   :background "orange"
+		   :foreground "black")))
   "Face for 16"
   :group 'drdv-2048-faces)
 (defface drdv-2048-face-32
-  '((t . (:background "orange red" :foreground "black")))
+  '((t . (:inherit highlight
+		   :background "orange red"
+		   :foreground "black")))
   "Face for 32"
   :group 'drdv-2048-faces)
 (defface drdv-2048-face-64
-  '((t . (:background "firebrick" :foreground "white")))
+  '((t . (:inherit highlight
+		   :background "firebrick"
+		   :foreground "white")))
   "Face for 64"
   :group 'drdv-2048-faces)
 
 (defface drdv-2048-face-128
-  '((t . (:background "dark red" :foreground "white")))
+  '((t . (:inherit highlight
+		   :background "dark red"
+		   :foreground "white")))
   "Face for 128"
   :group 'drdv-2048-faces)
 
 (defface drdv-2048-face-256
-  '((t . (:background "dark magenta" :foreground "white")))
+  '((t . (:inherit highlight
+		   :background "dark magenta"
+		   :foreground "white")))
   "Face for 256"
   :group 'drdv-2048-faces)
 
 (defface drdv-2048-face-512
-  '((t . (:background "magenta" :foreground "black")))
+  '((t . (:inherit highlight
+		   :background "magenta"
+		   :foreground "black")))
   "Face for 512"
   :group 'drdv-2048-faces)
 
 (defface drdv-2048-face-1024
-  '((t . (:background "gold" :foreground "black")))
+  '((t . (:inherit highlight
+		   :background "gold"
+		   :foreground "black")))
   "Face for 1024"
   :group 'drdv-2048-faces)
 
 (defface drdv-2048-face-2048
-  '((t . (:background "yellow" :foreground "black")))
+  '((t . (:inherit highlight
+		   :background "yellow"
+		   :foreground "black")))
   "Face for 2048"
   :group 'drdv-2048-faces)
 
