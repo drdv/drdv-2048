@@ -4,8 +4,8 @@
 
 ;; Author: Dimitar Dimitrov <mail.mitko@gmail.com>
 ;; URL: https://github.com/drdv/drdv-2048
-;; Package-Version: 20170503.1
-;; Package-Requires: ()
+;; Package-Version: 20170606.1
+;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: games
 
 ;; This file is not part of GNU Emacs.
@@ -38,50 +38,52 @@
 (defvar drdv-2048-dimension 4
   "Dimension of the (square) board.")
 
-(defvar drdv-2048-board (make-vector (* drdv-2048-dimension drdv-2048-dimension)
-				     0)
+(defvar-local drdv-2048-board (make-vector
+			       (* drdv-2048-dimension drdv-2048-dimension)
+			       0)
   "The board (zero-based column major storage).")
 
-(defvar drdv-2048-number-of-moves 0
+(defvar-local drdv-2048-number-of-moves 0
   "Number of valid moves performed.")
 
-(defvar drdv-2048-moves-history nil
+(defvar-local drdv-2048-moves-history nil
   "Valid moves history.")
 
-(defvar drdv-2048-last-move nil
+(defvar-local drdv-2048-last-move nil
   "Most recent valid move.
 When playing, this is the car or `drdv-2048-moves-history',
 but it is convenient to have a dedicated variable when
 replaying with `drdv-2048-replay'.")
 
-(defvar drdv-2048-score 0
+(defvar-local drdv-2048-score 0
   "The score.")
 
-(defvar drdv-2048-score-history nil
+(defvar-local drdv-2048-score-history nil
   "The score history.")
 
-(defvar drdv-2048-undo-stack nil
+(defvar-local drdv-2048-undo-stack nil
   "Stack to store previous state of `drdv-2048-board'.")
 
-(defvar drdv-2048-initial-board nil
+(defvar-local drdv-2048-initial-board nil
   "Initial state of `drdv-2048-board'.")
+
+(defvar-local drdv-2048-inserted-random-elements-history nil
+  "History of inserted random elements.")
 
 (defvar drdv-2048-replay-wait-period 0.01
   "Waiting period between redisplays in `drdv-2048-replay'.")
 
-(defvar drdv-2048-replay-save-images "macos"
-  "Set to nil to not not output images in `drdv-2048-replay'.")
+(defvar drdv-2048-replay-save-images nil ;; "macos"
+  "When equal to nil do not output images in `drdv-2048-replay'.")
 
-(defvar drdv-2048-buffer-name "*drdv-2048*"
-  "Name of buffer where to display the board.")
+(defvar drdv-2048-buffer-name-start "*drdv-2048*"
+  "Initial part of buffer name where to display the game.
+`generate-new-buffer-name' is used to generate unique buffer names.")
 
 (defvar drdv-2048-possible-values-to-insert-randomly (make-vector 10 2)
   "Randomly choose a number from this sequence upon insertion of new element.")
 ;; 90% of the time insert 2 (the remaining 10% insert 4)
 (aset drdv-2048-possible-values-to-insert-randomly 9 4)
-
-(defvar drdv-2048-inserted-random-elements-history nil
-  "History of inserted random elements.")
 
 (defvar drdv-2048-mode-map
   (let ((map (make-sparse-keymap)))
@@ -186,7 +188,7 @@ replaying with `drdv-2048-replay'.")
 (defun drdv-2048-play ()
   "Start/restart the game."
   (interactive)
-  (switch-to-buffer drdv-2048-buffer-name)
+  (switch-to-buffer (generate-new-buffer-name drdv-2048-buffer-name-start))
   (buffer-disable-undo)
   (drdv-2048-mode)
   (drdv-2048-reset-game)
@@ -435,8 +437,8 @@ Set DONT-RECORD non-nil to not record history (useful when initializing
 (defun drdv-2048-display-board ()
   "Display the board."
   ;; make sure that this function is executed only in the correct buffer
-  (unless (equal (buffer-name) drdv-2048-buffer-name)
-    (error (format "We are not in a %s buffer" drdv-2048-buffer-name)))
+  (unless (string-prefix-p drdv-2048-buffer-name-start (buffer-name))
+    (error (format "We are not in a %s buffer" drdv-2048-buffer-name-start)))
   (let ((inhibit-read-only t))
     (erase-buffer)
     (dotimes (row drdv-2048-dimension)
@@ -501,6 +503,10 @@ Set DONT-RECORD non-nil to not record history (useful when initializing
 	 (random-elements-history (cdr (assoc 'random-elements a)))
 	 index-and-value)
 
+    (switch-to-buffer (concat drdv-2048-buffer-name-start "-replay"))
+    (buffer-disable-undo)
+    (drdv-2048-mode)
+
     ;; vector -> list (and reverse it)
     (setq moves-history
 	  (reverse (mapcar (lambda (x) x) moves-history)))
@@ -517,9 +523,6 @@ Set DONT-RECORD non-nil to not record history (useful when initializing
     (setq drdv-2048-last-move nil)
     (setq drdv-2048-score 0)
 
-    (switch-to-buffer drdv-2048-buffer-name)
-    (buffer-disable-undo)
-    (drdv-2048-mode)
     (drdv-2048-display-board)
     (sit-for drdv-2048-replay-wait-period)
     (dotimes (k (length moves-history))
