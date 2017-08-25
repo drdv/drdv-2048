@@ -2,9 +2,9 @@
 
 A simple implementation of the [2048 game](http://gabrielecirulli.github.io/2048).
 
-![An example game with 974 moves stored in `scores/score-2048.json`](images/score-2048.png)
+![An example game with 974 moves stored in `scores/example-score.json`](images/example-score.png)
 
-The image is from a game with 974 moves stored in `scores/score-2048.json`. The file `count_moves.py`
+The image is from a game with 974 moves stored in `scores/example-score.json`. The file `count_moves.py`
 reports:
 
 ```
